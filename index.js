@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const DbConnection = require("./Config");
+require('./Config')
 const DataRouter = require("./Route/DataRoute");
 const AutRouter = require("./Route/Aut");
 const DataModel = require("./Model/DataModel");
@@ -33,5 +33,4 @@ app.use("/api/v1/Aut", AutRouter);
 const Port = 4500;
 app.listen(Port, () => {
   console.log(`Server is listening on ${Port}`);
-  DbConnection();
 });
