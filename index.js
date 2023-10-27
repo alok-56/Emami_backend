@@ -11,7 +11,8 @@ app.use(cors());
 
 app.post("/", async (req, res) => {
   try {
-    let data = await DataModel.create(req.body);
+    let data = new DataModel(req.body);
+    data = await data.save();
     if (data) {
       res.status(200).json({
         status: "success",
