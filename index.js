@@ -8,6 +8,9 @@ const AutRouter = require("./Route/Aut");
 app.use(express.json());
 app.use(cors());
 
+app.get("/",(req,res)=>{
+  res.send("running")
+})
 app.use("/api/v1/Emami", DataRouter);
 app.use("/api/v1/Aut", AutRouter);
 
