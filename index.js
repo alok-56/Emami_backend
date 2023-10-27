@@ -1,31 +1,17 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
-require('./Config')
+require("./Config");
+
+
 const DataRouter = require("./Route/DataRoute");
 const AutRouter = require("./Route/Aut");
-const DataModel = require("./Model/DataModel");
+const bodyparser=require('body-parser')
 
-app.use(express.json());
+const app = express();
 app.use(cors());
-
-app.post("/", async (req, res) => {
-  try {
-    let data = new DataModel(req.body);
-    data = await data.save();
-    if (data) {
-      res.status(200).json({
-        status: "success",
-        data: data,
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: error.message,
-    });
-  }
-});
+app.use(bodyparser.urlencoded({ extended: false }));
+app.use(bodyparser.json());
+app.use(express.json());
 
 app.use("/api/v1/Emami", DataRouter);
 app.use("/api/v1/Aut", AutRouter);
