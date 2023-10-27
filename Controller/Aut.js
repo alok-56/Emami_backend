@@ -3,7 +3,6 @@ const AutModel = require("../Model/Aut");
 const Signup = async (req, res) => {
   try {
     let { Email, Password } = req.body;
-
     let UserFound = await AutModel.findOne({ Email: Email });
     if (UserFound) {
       return res.status(200).json({
