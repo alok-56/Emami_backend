@@ -8,9 +8,24 @@ const AutRouter = require("./Route/Aut");
 app.use(express.json());
 app.use(cors());
 
-app.get("/",(req,res)=>{
-  res.send("running")
-})
+app.post('/',async (req,res)=>{
+  try {
+    let data = await DataModel.create(req.body);
+    if (data) {
+      res.status(200).json({
+        status: "success",
+        data: data,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}) 
+
+
 app.use("/api/v1/Emami", DataRouter);
 app.use("/api/v1/Aut", AutRouter);
 
