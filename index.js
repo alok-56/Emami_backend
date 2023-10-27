@@ -4,11 +4,12 @@ const cors = require("cors");
 const DbConnection = require("./Config");
 const DataRouter = require("./Route/DataRoute");
 const AutRouter = require("./Route/Aut");
+const DataModel = require("./Model/DataModel");
 
 app.use(express.json());
 app.use(cors());
 
-app.post('/',async (req,res)=>{
+app.post("/", async (req, res) => {
   try {
     let data = await DataModel.create(req.body);
     if (data) {
@@ -23,8 +24,7 @@ app.post('/',async (req,res)=>{
       message: error.message,
     });
   }
-}) 
-
+});
 
 app.use("/api/v1/Emami", DataRouter);
 app.use("/api/v1/Aut", AutRouter);
