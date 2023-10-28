@@ -384,9 +384,9 @@ const fetchDevice=async(req,res)=>{
 
 const FetchCombined = async (req, res) => {
   try {
-    const data = await axios.get("http://localhost:4500/api/v1/Emami/fetch");
+    const data = await axios.get("https://emami-backend-indol.vercel.app/api/v1/Emami/fetch");
     const rangebymonth = await axios.post(
-      "http://localhost:4500/api/v1/Emami/FetchData",
+      "https://emami-backend-indol.vercel.app/api/v1/Emami/FetchData",
       {
         headers: {
           "content-type": "application/json",
@@ -399,7 +399,7 @@ const FetchCombined = async (req, res) => {
       }
     );
     const rangebyos = await axios.post(
-      "http://localhost:4500/api/v1/Emami/FetchOs",
+      "https://emami-backend-indol.vercel.app/api/v1/Emami/FetchOs",
       {
         headers: {
           "content-type": "application/json",
@@ -412,7 +412,7 @@ const FetchCombined = async (req, res) => {
       }
     );
     const rangebybrowser = await axios.post(
-      "http://localhost:4500/api/v1/Emami/Fetchbrowser",
+      "https://emami-backend-indol.vercel.app/api/v1/Emami/Fetchbrowser",
       {
         headers: {
           "content-type": "application/json",
@@ -426,7 +426,7 @@ const FetchCombined = async (req, res) => {
     );
 
     const rangebyDevice = await axios.post(
-      "http://localhost:4500/api/v1/Emami/Fetchdevice",
+      "https://emami-backend-indol.vercel.app/api/v1/Emami/Fetchdevice",
       {
         headers: {
           "content-type": "application/json",
