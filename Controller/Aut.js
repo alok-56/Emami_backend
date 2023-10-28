@@ -10,7 +10,6 @@ const Signup = async (req, res) => {
         message: "Email already exists",
       });
     }
-    console.log(Email, Password);
     if (Email.length === 0) {
       return res.status(404).json({
         status: "error",
@@ -59,6 +58,11 @@ const Login = async (req, res) => {
         status: "success",
         message: "Login successful",
         data: data,
+      });
+    } else {
+      res.status(200).json({
+        status: "error",
+        message: "Not Found",
       });
     }
   } catch (error) {
