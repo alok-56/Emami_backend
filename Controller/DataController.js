@@ -109,7 +109,12 @@ const FetchData = async (req, res) => {
 
     result.forEach((item) => {
       // const Week = item.dynamicData[0].day;
-      let date = new Date(item.dynamicData[0].created).getDate();
+      let date =
+        new Date(item.dynamicData[0].created).getDate() +
+        "/" +
+        new Date(item.dynamicData[0].created).getMonth() +
+        "/" +
+        new Date(item.dynamicData[0].created).getFullYear();
       let time = new Date(item.dynamicData[0].created).getHours();
       const os = item.dynamicData[0].os_family;
       const Browser = item.dynamicData[0].browser_family;
@@ -707,13 +712,17 @@ const FetchAllProductData = async (req, res) => {
 
     result.forEach((item) => {
       // const Week = item.dynamicData[0].day;
-      let date = new Date(item.dynamicData[0].created).getDate();
+      let date =
+        new Date(item.dynamicData[0].created).getDate() +
+        "/" +
+        new Date(item.dynamicData[0].created).getMonth() +
+        "/" +
+        new Date(item.dynamicData[0].created).getFullYear();
       let time = new Date(item.dynamicData[0].created).getHours();
       const os = item.dynamicData[0].os_family;
       const Browser = item.dynamicData[0].browser_family;
       const Device = item.dynamicData[0].device_type;
       if (
-        // !WeekData[Week] ||
         !dateData[date] ||
         !OsData[os] ||
         !BrowserData[Browser] ||
