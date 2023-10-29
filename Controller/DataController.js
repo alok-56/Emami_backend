@@ -26,14 +26,149 @@ const PostData = async (req, res) => {
 //--------------------------FetchData All Data From MOngodb-------------------------------------//
 
 const FetchData = async (req, res) => {
+  //------------------Month------------------------------//
+  let jan = 0;
+  let feb = 0;
+  let march = 0;
+  let april = 0;
+  let may = 0;
+  let june = 0;
+  let july = 0;
+  let augest = 0;
+  let sept = 0;
+  let oct = 0;
+  let nov = 0;
+  let dec = 0;
+
+  //--------------------Week------------------------------//
+
+  let sun = 0;
+  let mon = 0;
+  let tues = 0;
+  let wed = 0;
+  let thues = 0;
+  let fri = 0;
+  let sat = 0;
   try {
-    let data = await DataModel.find();
-    if (data) {
-      res.status(200).json({
-        status: "success",
-        message: data,
-      });
-    }
+    let result = await DataModel.find();
+    result.forEach((item, index) => {
+      let week = item.dynamicData[0].day;
+      if (week == "Monday") {
+        mon = mon + 1;
+      } else if (week == "Tuesday") {
+        tues = tues + 1;
+      } else if (week == "Wednesday") {
+        wed = wed + 1;
+      } else if (week == "Thursday") {
+        thues = thues + 1;
+      } else if (week == "Friday") {
+        fri = fri + 1;
+      } else if (week == "Saturday") {
+        sat = sat + 1;
+      } else if (week == "Sunday") {
+        sun = sun + 1;
+      }
+    });
+
+    result.forEach((item, index) => {
+      let month = new Date(item.dynamicData[0].created).getMonth() + 1;
+      if (month == 1) {
+        jan = jan + 1;
+      } else if (month == 2) {
+        feb = feb + 1;
+      } else if (month == 3) {
+        march = march + 1;
+      } else if (april == 4) {
+        april = april + 1;
+      } else if (month == 5) {
+        may = may + 1;
+      } else if (month == 6) {
+        june = june + 1;
+      } else if (month == 7) {
+        july = july + 1;
+      } else if (month == 8) {
+        augest = augest + 1;
+      } else if (month == 9) {
+        sept = sept + 1;
+      } else if (month == 10) {
+        oct = oct + 1;
+      } else if (month == 11) {
+        nov = nov + 1;
+      } else if (month == 12) {
+        dec = dec + 1;
+      }
+    });
+
+    //------------Grouping Data--------------------//
+    // const WeekData = {};
+    const timeData = {};
+    const dateData = {};
+    const OsData = {};
+    const BrowserData = {};
+    const DeviceData = {};
+
+    result.forEach((item) => {
+      // const Week = item.dynamicData[0].day;
+      let date = new Date(item.dynamicData[0].created).getDate();
+      let time = new Date(item.dynamicData[0].created).getHours();
+      const os = item.dynamicData[0].os_family;
+      const Browser = item.dynamicData[0].browser_family;
+      const Device = item.dynamicData[0].device_type;
+      if (
+        // !WeekData[Week] ||
+        !dateData[date] ||
+        !OsData[os] ||
+        !BrowserData[Browser] ||
+        !DeviceData[Device] ||
+        !timeData[time]
+      ) {
+        // WeekData[Week] = 0;
+        timeData[time] = 0;
+        dateData[date] = 0;
+        OsData[os] = 0;
+        BrowserData[Browser] = 0;
+        DeviceData[Device] = 0;
+      }
+      // WeekData[Week]++;
+      timeData[time]++;
+      dateData[date]++;
+      OsData[os]++;
+      BrowserData[Browser]++;
+      DeviceData[Device]++;
+    });
+
+    res.status(200).json({
+      status: "success",
+      TotalScans: result.length,
+      month: {
+        jan,
+        feb,
+        march,
+        april,
+        may,
+        june,
+        july,
+        augest,
+        sept,
+        oct,
+        nov,
+        dec,
+      },
+      week: {
+        mon,
+        tues,
+        wed,
+        thues,
+        fri,
+        sat,
+        sun,
+      },
+      time: timeData,
+      date: dateData,
+      Os: OsData,
+      Browser: BrowserData,
+      device: DeviceData,
+    });
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -284,10 +419,9 @@ const BrowserData = async (req, res) => {
   }
 };
 
-
 //-----------------------Fetch Devices data---------------------//
 
-const fetchDevice=async(req,res)=>{
+const fetchDevice = async (req, res) => {
   let startDate = new Date(req.body.data.startDate).toISOString();
   let endDate = new Date(req.body.data.endDate).toISOString();
   try {
@@ -330,8 +464,7 @@ const fetchDevice=async(req,res)=>{
       data: error.message,
     });
   }
-}
-
+};
 
 // //-----------------------Fetch State data---------------------//
 
@@ -384,7 +517,9 @@ const fetchDevice=async(req,res)=>{
 
 const FetchCombined = async (req, res) => {
   try {
-    const data = await axios.get("https://emami-backend-indol.vercel.app/api/v1/Emami/fetch");
+    const data = await axios.get(
+      "https://emami-backend-indol.vercel.app/api/v1/Emami/fetch"
+    );
     const rangebymonth = await axios.post(
       "https://emami-backend-indol.vercel.app/api/v1/Emami/FetchData",
       {
@@ -443,7 +578,7 @@ const FetchCombined = async (req, res) => {
       month: rangebymonth.data,
       os: rangebyos.data,
       browserFamily: rangebybrowser.data,
-      device:rangebyDevice.data
+      device: rangebyDevice.data,
     });
   } catch (error) {
     res.status(500).json({
@@ -453,6 +588,188 @@ const FetchCombined = async (req, res) => {
   }
 };
 
+//-----------------------Fetch All product Data---------------------------//
+
+const FetchAllProductData = async (req, res) => {
+  //------------------Month------------------------------//
+  let jan = 0;
+  let feb = 0;
+  let march = 0;
+  let april = 0;
+  let may = 0;
+  let june = 0;
+  let july = 0;
+  let augest = 0;
+  let sept = 0;
+  let oct = 0;
+  let nov = 0;
+  let dec = 0;
+
+  //--------------------Week------------------------------//
+
+  let sun = 0;
+  let mon = 0;
+  let tues = 0;
+  let wed = 0;
+  let thues = 0;
+  let fri = 0;
+  let sat = 0;
+
+  let startDate = new Date(req.body.startDate).toISOString();
+  let endDate = new Date(req.body.endDate).toISOString();
+  try {
+    //--------------Checking Start Date And End Date -------------------//
+    if (!startDate || !endDate) {
+      return res.status(404).json({
+        status: "success",
+        message: "Invalid start date or End date",
+      });
+    }
+
+    //--------------Geeting all Documents-----------------------------//
+    let result = await DataModel.find({
+      $and: [
+        {
+          $and: [
+            {
+              "dynamicData.created": {
+                $gte: startDate,
+              },
+            },
+            {
+              "dynamicData.created": {
+                $lte: endDate,
+              },
+            },
+          ],
+        },
+        {
+          "dynamicData.qr_code_name": req.body.qr_code_name,
+        },
+      ],
+    });
+
+    result.forEach((item, index) => {
+      let week = item.dynamicData[0].day;
+      if (week == "Monday") {
+        mon = mon + 1;
+      } else if (week == "Tuesday") {
+        tues = tues + 1;
+      } else if (week == "Wednesday") {
+        wed = wed + 1;
+      } else if (week == "Thursday") {
+        thues = thues + 1;
+      } else if (week == "Friday") {
+        fri = fri + 1;
+      } else if (week == "Saturday") {
+        sat = sat + 1;
+      } else if (week == "Sunday") {
+        sun = sun + 1;
+      }
+    });
+
+    result.forEach((item, index) => {
+      let month = new Date(item.dynamicData[0].created).getMonth() + 1;
+      if (month == 1) {
+        jan = jan + 1;
+      } else if (month == 2) {
+        feb = feb + 1;
+      } else if (month == 3) {
+        march = march + 1;
+      } else if (april == 4) {
+        april = april + 1;
+      } else if (month == 5) {
+        may = may + 1;
+      } else if (month == 6) {
+        june = june + 1;
+      } else if (month == 7) {
+        july = july + 1;
+      } else if (month == 8) {
+        augest = augest + 1;
+      } else if (month == 9) {
+        sept = sept + 1;
+      } else if (month == 10) {
+        oct = oct + 1;
+      } else if (month == 11) {
+        nov = nov + 1;
+      } else if (month == 12) {
+        dec = dec + 1;
+      }
+    });
+
+    //------------Grouping Data--------------------//
+    // const WeekData = {};
+    const timeData = {};
+    const dateData = {};
+    const OsData = {};
+    const BrowserData = {};
+    const DeviceData = {};
+
+    result.forEach((item) => {
+      // const Week = item.dynamicData[0].day;
+      let date = new Date(item.dynamicData[0].created).getDate();
+      let time = new Date(item.dynamicData[0].created).getHours();
+      const os = item.dynamicData[0].os_family;
+      const Browser = item.dynamicData[0].browser_family;
+      const Device = item.dynamicData[0].device_type;
+      if (
+        // !WeekData[Week] ||
+        !dateData[date] ||
+        !OsData[os] ||
+        !BrowserData[Browser] ||
+        !DeviceData[Device] ||
+        !timeData[time]
+      ) {
+        // WeekData[Week] = 0;
+        timeData[time] = 0;
+        dateData[date] = 0;
+        OsData[os] = 0;
+        BrowserData[Browser] = 0;
+        DeviceData[Device] = 0;
+      }
+      // WeekData[Week]++;
+      timeData[time]++;
+      dateData[date]++;
+      OsData[os]++;
+      BrowserData[Browser]++;
+      DeviceData[Device]++;
+    });
+
+    res.status(200).json({
+      status: "success",
+      TotalScans: result.length,
+      month: {
+        jan,
+        feb,
+        march,
+        april,
+        may,
+        june,
+        july,
+        augest,
+        sept,
+        oct,
+        nov,
+        dec,
+      },
+      week: {
+        mon,
+        tues,
+        wed,
+        thues,
+        fri,
+        sat,
+        sun,
+      },
+      time: timeData,
+      date: dateData,
+      Os: OsData,
+      Browser: BrowserData,
+      device: DeviceData,
+    });
+  } catch (error) {}
+};
+
 module.exports = {
   PostData,
   FetchData,
@@ -460,5 +777,6 @@ module.exports = {
   FetchOsData,
   FetchCombined,
   BrowserData,
-  fetchDevice
+  fetchDevice,
+  FetchAllProductData,
 };
