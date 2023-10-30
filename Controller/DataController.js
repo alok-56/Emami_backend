@@ -110,53 +110,42 @@ const FetchData = async (req, res) => {
     //-------------------Date Time---------------------//
     result.forEach((item) => {
       let time = new Date(item.dynamicData[0].created).getHours();
-      if (!timeData[time] ) {
-       
+      if (!timeData[time]) {
         timeData[time] = 0;
-       
       }
       timeData[time]++;
-      
     });
 
     //-------------------Date-------------------------//
     result.forEach((item) => {
-      let date =
-        new Date(item.dynamicData[0].created).getDate() +
-        "/" +
-        new Date(item.dynamicData[0].created).getMonth() +
-        "/" +
-        new Date(item.dynamicData[0].created).getFullYear();
-      if ( !dateData[date]) {
-       
-        
+      let date = `${new Date(item.dynamicData[0].created).getDate()}/${
+        new Date(item.dynamicData[0].created).getMonth() + 1
+      }/${new Date(item.dynamicData[0].created).getFullYear()}`;
+
+      if (!dateData[date]) {
         dateData[date] = 0;
       }
-    
+
       dateData[date]++;
     });
 
-    //---------------OS AND DEVICE---------------//
+    //---------------OS ---------------//
     result.forEach((item) => {
       const os = item.dynamicData[0].os_family;
-     
-      if (!OsData[os] ) {
+
+      if (!OsData[os]) {
         OsData[os] = 0;
-       
       }
       OsData[os]++;
-     
     });
 
     //---------------Device---------------//
     result.forEach((item) => {
-     
       const Device = item.dynamicData[0].device_type;
-      if ( !DeviceData[Device]) {
-       
+      if (!DeviceData[Device]) {
         DeviceData[Device] = 0;
       }
-      
+
       DeviceData[Device]++;
     });
 
@@ -736,57 +725,46 @@ const FetchAllProductData = async (req, res) => {
     const OsData = {};
     const BrowserData = {};
     const DeviceData = {};
+    const mapData={} 
 
     //-------------------Date Time---------------------//
     result.forEach((item) => {
       let time = new Date(item.dynamicData[0].created).getHours();
-      if (!timeData[time] ) {
-       
+      if (!timeData[time]) {
         timeData[time] = 0;
-       
       }
       timeData[time]++;
-      
     });
 
     //-------------------Date-------------------------//
     result.forEach((item) => {
-      let date =
-        new Date(item.dynamicData[0].created).getDate() +
-        "/" +
-        new Date(item.dynamicData[0].created).getMonth() +
-        "/" +
-        new Date(item.dynamicData[0].created).getFullYear();
-      if ( !dateData[date]) {
-       
-        
+      let date = `${new Date(item.dynamicData[0].created).getDate()}/${
+        new Date(item.dynamicData[0].created).getMonth() + 1
+      }/${new Date(item.dynamicData[0].created).getFullYear()}`;
+      if (!dateData[date]) {
         dateData[date] = 0;
       }
-    
+
       dateData[date]++;
     });
 
     //---------------OS AND DEVICE---------------//
     result.forEach((item) => {
       const os = item.dynamicData[0].os_family;
-     
-      if (!OsData[os] ) {
+
+      if (!OsData[os]) {
         OsData[os] = 0;
-       
       }
       OsData[os]++;
-     
     });
 
     //---------------Device---------------//
     result.forEach((item) => {
-     
       const Device = item.dynamicData[0].device_type;
-      if ( !DeviceData[Device]) {
-       
+      if (!DeviceData[Device]) {
         DeviceData[Device] = 0;
       }
-      
+
       DeviceData[Device]++;
     });
 
@@ -799,9 +777,19 @@ const FetchAllProductData = async (req, res) => {
       BrowserData[Browser]++;
     });
 
+    //------------Map------------------//
+    result.forEach((item)=>{
+      const map=item.dynamicData[0].city
+      if(!mapData[map]){
+        mapData[map]=0;
+      }
+      mapData[map]++;
+    })
+
     res.status(200).json({
       status: "success",
       TotalScans: result.length,
+      result:result,
       month: {
         jan,
         feb,
@@ -830,6 +818,7 @@ const FetchAllProductData = async (req, res) => {
       Os: OsData,
       Browser: BrowserData,
       device: DeviceData,
+      map:mapData
     });
   } catch (error) {}
 };
