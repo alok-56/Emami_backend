@@ -107,39 +107,66 @@ const FetchData = async (req, res) => {
     const BrowserData = {};
     const DeviceData = {};
 
+    //-------------------Date Time---------------------//
     result.forEach((item) => {
-      // const Week = item.dynamicData[0].day;
+      let time = new Date(item.dynamicData[0].created).getHours();
+      if (!timeData[time] ) {
+       
+        timeData[time] = 0;
+       
+      }
+      timeData[time]++;
+      
+    });
+
+    //-------------------Date-------------------------//
+    result.forEach((item) => {
       let date =
         new Date(item.dynamicData[0].created).getDate() +
         "/" +
         new Date(item.dynamicData[0].created).getMonth() +
         "/" +
         new Date(item.dynamicData[0].created).getFullYear();
-      let time = new Date(item.dynamicData[0].created).getHours();
-      const os = item.dynamicData[0].os_family;
-      const Browser = item.dynamicData[0].browser_family;
-      const Device = item.dynamicData[0].device_type;
-      if (
-        // !WeekData[Week] ||
-        !dateData[date] ||
-        !OsData[os] ||
-        !BrowserData[Browser] ||
-        !DeviceData[Device] ||
-        !timeData[time]
-      ) {
-        // WeekData[Week] = 0;
-        timeData[time] = 0;
+      if ( !dateData[date]) {
+       
+        
         dateData[date] = 0;
+      }
+    
+      dateData[date]++;
+    });
+
+    //---------------OS AND DEVICE---------------//
+    result.forEach((item) => {
+      const os = item.dynamicData[0].os_family;
+     
+      if (!OsData[os] ) {
         OsData[os] = 0;
-        BrowserData[Browser] = 0;
+       
+      }
+      OsData[os]++;
+     
+    });
+
+    //---------------Device---------------//
+    result.forEach((item) => {
+     
+      const Device = item.dynamicData[0].device_type;
+      if ( !DeviceData[Device]) {
+       
         DeviceData[Device] = 0;
       }
-      // WeekData[Week]++;
-      timeData[time]++;
-      dateData[date]++;
-      OsData[os]++;
-      BrowserData[Browser]++;
+      
       DeviceData[Device]++;
+    });
+
+    //------------Browser----------------//
+    result.forEach((item) => {
+      const Browser = item.dynamicData[0].browser_family;
+      if (!BrowserData[Browser]) {
+        BrowserData[Browser] = 0;
+      }
+      BrowserData[Browser]++;
     });
 
     res.status(200).json({
@@ -710,38 +737,66 @@ const FetchAllProductData = async (req, res) => {
     const BrowserData = {};
     const DeviceData = {};
 
+    //-------------------Date Time---------------------//
     result.forEach((item) => {
-      // const Week = item.dynamicData[0].day;
+      let time = new Date(item.dynamicData[0].created).getHours();
+      if (!timeData[time] ) {
+       
+        timeData[time] = 0;
+       
+      }
+      timeData[time]++;
+      
+    });
+
+    //-------------------Date-------------------------//
+    result.forEach((item) => {
       let date =
         new Date(item.dynamicData[0].created).getDate() +
         "/" +
         new Date(item.dynamicData[0].created).getMonth() +
         "/" +
         new Date(item.dynamicData[0].created).getFullYear();
-      let time = new Date(item.dynamicData[0].created).getHours();
-      const os = item.dynamicData[0].os_family;
-      const Browser = item.dynamicData[0].browser_family;
-      const Device = item.dynamicData[0].device_type;
-      if (
-        !dateData[date] ||
-        !OsData[os] ||
-        !BrowserData[Browser] ||
-        !DeviceData[Device] ||
-        !timeData[time]
-      ) {
-        // WeekData[Week] = 0;
-        timeData[time] = 0;
+      if ( !dateData[date]) {
+       
+        
         dateData[date] = 0;
+      }
+    
+      dateData[date]++;
+    });
+
+    //---------------OS AND DEVICE---------------//
+    result.forEach((item) => {
+      const os = item.dynamicData[0].os_family;
+     
+      if (!OsData[os] ) {
         OsData[os] = 0;
-        BrowserData[Browser] = 0;
+       
+      }
+      OsData[os]++;
+     
+    });
+
+    //---------------Device---------------//
+    result.forEach((item) => {
+     
+      const Device = item.dynamicData[0].device_type;
+      if ( !DeviceData[Device]) {
+       
         DeviceData[Device] = 0;
       }
-      // WeekData[Week]++;
-      timeData[time]++;
-      dateData[date]++;
-      OsData[os]++;
-      BrowserData[Browser]++;
+      
       DeviceData[Device]++;
+    });
+
+    //------------Browser----------------//
+    result.forEach((item) => {
+      const Browser = item.dynamicData[0].browser_family;
+      if (!BrowserData[Browser]) {
+        BrowserData[Browser] = 0;
+      }
+      BrowserData[Browser]++;
     });
 
     res.status(200).json({
