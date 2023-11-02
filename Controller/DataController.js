@@ -725,7 +725,8 @@ const FetchAllProductData = async (req, res) => {
     const OsData = {};
     const BrowserData = {};
     const DeviceData = {};
-    const mapData={} 
+    const mapData = {};
+    const citycode = {};
 
     //-------------------Date Time---------------------//
     result.forEach((item) => {
@@ -778,18 +779,27 @@ const FetchAllProductData = async (req, res) => {
     });
 
     //------------Map------------------//
-    result.forEach((item)=>{
-      const map=item.dynamicData[0].city
-      if(!mapData[map]){
-        mapData[map]=0;
+    result.forEach((item) => {
+      const map = item.dynamicData[0].city;
+      if (!mapData[map]) {
+        mapData[map] = 0;
       }
       mapData[map]++;
-    })
+    });
+
+    //-------------CityCode-------------//
+    result.forEach((item) => {
+      const city = item.dynamicData[0].region;
+      if (!citycode[city]) {
+        citycode[city] = 0;
+      }
+      citycode[city]++;
+    });
 
     res.status(200).json({
       status: "success",
       TotalScans: result.length,
-      result:result,
+      result: result,
       month: {
         jan,
         feb,
@@ -818,7 +828,8 @@ const FetchAllProductData = async (req, res) => {
       Os: OsData,
       Browser: BrowserData,
       device: DeviceData,
-      map:mapData
+      map: mapData,
+      citycode:citycode
     });
   } catch (error) {}
 };
